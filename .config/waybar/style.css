@@ -1,12 +1,12 @@
 @import "./colors.css";
 
-@define-color accent @color5;
+@define-color accent @primary_container;
 @define-color bg @background;
-@define-color text @foreground;
+@define-color text @on_primary_container;
 @define-color invText @color0;
 
 * {
-    font-family: Iosevka;
+    font-family: "Iosevka";
     font-size: 14px;
     border-radius: 0px;
     min-height: 0px;
@@ -14,9 +14,10 @@
 }
 
 window#waybar {
-    background-color: @background;
+    background-color: @bg;
     color: @text;
     transition-property: background-color;
+    /* opacity: 0.85; */
 }
 
 #workspaces button {
@@ -42,10 +43,18 @@ window#waybar {
     margin: 0px;
 }
 
+#custom-divider {
+    color: @accent;
+}
+
 .modules-left,
 .modules-right {
     background-color: @bg;
     padding: 0px;
+}
+
+.modules-right {
+    padding-left: 4px;
 }
 
 #window {

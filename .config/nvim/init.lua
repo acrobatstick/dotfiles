@@ -1,4 +1,4 @@
-vim.opt.cmdheight = 0
+-- vim.opt.cmdheight = 0
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -92,6 +92,10 @@ vim.opt.scrolloff = 10
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+vim.keymap.set('n', 'K', function()
+  vim.lsp.buf.hover { border = 'single', max_height = 25, max_width = 120 }
+end, { desc = 'Hover documentation' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -393,6 +397,15 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
+    opts = {
+      ui = {
+        windows = {
+          default_options = {
+            border = 'rounded',
+          },
+        },
+      },
+    },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
@@ -570,41 +583,41 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         eslint = {},
-        volar = {
-          -- filetypes = { 'vue', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
-          init_options = {
-            vue = {
-              hybridMode = false,
-            },
-            typescript = {
-              tsdk = vim.fn.getcwd() .. '/node_modules/typescript/lib',
-            },
-          },
-          settings = {
-            typescript = {
-              inlayHints = {
-                enumMemberValues = {
-                  enabled = true,
-                },
-                functionLikeReturnTypes = {
-                  enabled = true,
-                },
-                propertyDeclarationTypes = {
-                  enabled = true,
-                },
-                parameterTypes = {
-                  enabled = true,
-                  suppressWhenArgumentMatchesName = true,
-                },
-                variableTypes = {
-                  enabled = true,
-                },
-              },
-            },
-          },
-        },
+        -- volar = {
+        --   -- filetypes = { 'vue', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+        --   init_options = {
+        --     vue = {
+        --       hybridMode = false,
+        --     },
+        --     typescript = {
+        --       tsdk = vim.fn.getcwd() .. '/node_modules/typescript/lib',
+        --     },
+        --   },
+        --   settings = {
+        --     typescript = {
+        --       inlayHints = {
+        --         enumMemberValues = {
+        --           enabled = true,
+        --         },
+        --         functionLikeReturnTypes = {
+        --           enabled = true,
+        --         },
+        --         propertyDeclarationTypes = {
+        --           enabled = true,
+        --         },
+        --         parameterTypes = {
+        --           enabled = true,
+        --           suppressWhenArgumentMatchesName = true,
+        --         },
+        --         variableTypes = {
+        --           enabled = true,
+        --         },
+        --       },
+        --     },
+        --   },
+        -- },
         ts_ls = {
-          -- filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
           init_options = {
             plugins = {
               {
@@ -661,6 +674,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'ts_ls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -768,6 +782,14 @@ require('lazy').setup({
       luasnip.config.setup {}
 
       cmp.setup {
+        -- window = {
+        --   completion = {
+        --     border = 'single',
+        --   },
+        --   documentation = {
+        --     border = 'single',
+        --   },
+        -- },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -867,208 +889,54 @@ require('lazy').setup({
   --   end,
   -- },
 
-  -- {
-  --   'zenbones-theme/zenbones.nvim',
-  --   -- Optionally install Lush. Allows for more configuration or extending the colorscheme
-  --   -- If you don't want to install lush, make sure to set g:zenbones_compat = 1
-  --   -- In Vim, compat mode is turned on as Lush only works in Neovim.
-  --   dependencies = 'rktjmp/lush.nvim',
-  --   lazy = false,
-  --   priority = 1000,
-  --   -- you can set set configuration options here
-  --   config = function()
-  --     vim.g.zenbones_darken_comments = 100
-  --     vim.g.zenwritten = { transparent_background = true }
-  --     vim.cmd.colorscheme 'zenwritten'
-  --   end,
-  -- },
-
   {
-    'RedsXDD/neopywal.nvim',
-    name = 'neopywal',
-    lazy = false,
-    priority = 1000,
-    opts = {},
-    config = function()
-      vim.cmd.colorscheme 'neopywal'
+    'dybdeskarphet/gruvbox-minimal.nvim',
+    init = function()
+      require('gruvbox-minimal').setup {
+        transparent = true, -- Sets all the major background values to 'none'
+        italic_comments = false, -- Italic comments
+        contrast = 'low', -- Available values: "high", "low"
+        theme = 'dark', -- Available values: "dark", "light"
+        accent = 'orange', -- Changes the definition (functions, structs etc.) colors. Available values: "red", "orange", "yellow", "green", "cyan", "blue", "magenta"
+      }
+      vim.cmd.colorscheme 'gruvbox-minimal'
     end,
   },
+  -- {
+  --   'slugbyte/lackluster.nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  --   init = function()
+  --     local lackluster = require 'lackluster'
+  --     lackluster.setup {
+  --       tweak_background = {
+  --         normal = 'none', -- transparent
+  --         telescope = 'default', -- telescope
+  --       },
+  --     }
+  --     -- vim.cmd.colorscheme 'lackluster'
+  --     vim.cmd.colorscheme 'lackluster-mint' -- my favorite
+  --   end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
 
-  { -- Status bar controller
-    'nvim-lualine/lualine.nvim',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-      'akinsho/toggleterm.nvim',
-      'arkav/lualine-lsp-progress',
-    },
-    opts = {
-      options = {
-        globalstatus = true,
-        component_separators = { left = '', right = '' },
-        section_separators = { left = '', right = '' },
-        always_divide_middle = true,
-      },
-      sections = {
-        lualine_a = {
-          { -- Project abbreviation
-            function()
-              local projectName = vim.fs.basename(vim.fn.getcwd())
-              local firstChars = {}
-              for str in string.gmatch(projectName, '([^-_,%s.]+)') do
-                table.insert(firstChars, string.upper(string.sub(str, 1, 1)))
-              end
-              return (firstChars[1] or '') .. (#firstChars > 1 and firstChars[#firstChars] or string.upper(string.sub(projectName, 2, 2)) or '')
-            end,
-          },
-        },
-        lualine_b = {
-          { -- Project name
-            function()
-              local cwd = vim.fn.getcwd()
-              local devpath = vim.fn.fnamemodify('~/Developer', ':p')
-
-              if cwd:find(devpath, 1, true) == 1 then
-                local name = vim.fs.basename(cwd)
-                local code = vim.fs.basename(vim.fs.dirname(cwd))
-                local account = vim.fs.basename(vim.fs.dirname(vim.fn.fnamemodify(cwd, ':h')))
-
-                return account .. '' .. (tonumber(code) or code) .. ' ' .. name
-              else
-                return vim.fs.basename(cwd)
-              end
-            end,
-          },
-          'branch',
-          -- "diff",
-          {
-            'filetype',
-            padding = { left = 1, right = 0 },
-            icon_only = true,
-          },
-          {
-            'filename',
-            file_status = true,
-            newfile_status = true,
-            path = 1, -- Show relative path
-            symbols = { newfile = '[new]', unnamed = '[no name]' },
-            fmt = function(name, _)
-              local filePath, rest = name:match '(.+)%s*(%[*.*%]*)'
-              local parentPath = vim.fn.fnamemodify(filePath, ':h')
-              local fileName = vim.fs.basename(filePath)
-
-              if string.match(name, 'term://.*toggleterm#.*') then
-                local terms = require('toggleterm.terminal').get_all()
-                local term = require('toggleterm.terminal').get(tonumber(vim.b.toggle_number))
-                local termid = term and term.id or ''
-                local termname = term and termid .. ': ' .. (term:_display_name()) or ''
-                return 'term ' .. termname .. ' (' .. #terms .. ') ' .. (rest or '')
-              end
-              if string.match(name, 'term://.*') then
-                local path_parts = vim.fn.split(vim.fn.expand '%', ':')
-                local last = path_parts[#path_parts]
-                if type(last) == 'string' and last ~= '' then
-                  return last and 'term ' .. last
-                end
-              end
-
-              local shorten_after = math.floor(vim.o.columns / 238 * 70)
-              if string.len(filePath) > shorten_after then
-                local rightPart = vim.fs.basename(parentPath) .. '/' .. fileName
-                local leftPart = string.sub(filePath, 1, shorten_after - string.len(rightPart))
-                return leftPart .. '../' .. rightPart .. ' ' .. (rest or '')
-              else
-                return filePath .. ' ' .. (rest or '')
-              end
-            end,
-            color = function(_)
-              return vim.b.custom_git_status_hl or 'Custom_TabSel'
-            end,
-          },
-        },
-        lualine_c = {
-          {
-            'navic',
-
-            -- Component specific options
-            color_correction = 'dynamic', -- Can be nil, "static" or "dynamic". This option is useful only when you have highlights enabled.
-            -- Many colorschemes don't define same backgroud for nvim-navic as their lualine statusline backgroud.
-            -- Setting it to "static" will perform a adjustment once when the component is being setup. This should
-            --   be enough when the lualine section isn't changing colors based on the mode.
-            -- Setting it to "dynamic" will keep updating the highlights according to the current modes colors for
-            --   the current section.
-
-            navic_opts = {
-              click = true,
-              separator = '  ',
-              highlight = true,
-            }, -- lua table with same format as setup's option. All options except "lsp" options take effect when set here.
-          },
-        },
-        lualine_x = {
-          { 'lsp_progress' },
-          { 'copilot' },
-          { 'diagnostics' },
-          {
-            'overseer',
-            label = '', -- Prefix for task counts
-            colored = true, -- Color the task icons and counts
-            unique = false, -- Unique-ify non-running task count by name
-            name = nil, -- List of task names to search for
-            name_not = false, -- When true, invert the name search
-            status = nil, -- List of task statuses to display
-            status_not = false, -- When true, invert the status search
-          },
-        },
-        lualine_y = {
-          'searchcount',
-          'progress',
-          'location',
-        },
-        lualine_z = {
-          {
-            'mode',
-            fmt = function(mode)
-              local modes = {
-                ['NORMAL'] = 'NORM',
-                ['O-PENDING'] = 'OPND',
-                ['VISUAL'] = 'VISU',
-                ['V-LINE'] = 'VISL',
-                ['V-BLOCK'] = 'VISB',
-                ['SELECT'] = 'SELE',
-                ['S-LINE'] = 'SELL',
-                ['S-BLOCK'] = 'SELB',
-                ['INSERT'] = 'INSE',
-                ['REPLACE'] = 'RPLC',
-                ['V-REPLACE'] = 'VRPL',
-                ['COMMAND'] = 'COMM',
-                ['EX'] = 'ExEC',
-                ['MORE'] = 'MORE',
-                ['CONFIRM'] = 'CONF',
-                ['SHELL'] = 'SHEL',
-                ['TERMINAL'] = 'TERM',
-              }
-              return modes[mode] or mode
-            end,
-          },
-        },
-      },
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
-        lualine_y = {},
-        lualine_z = {},
-      },
-    },
-    config = function(_, opts)
-      require('lualine').setup(opts)
-    end,
-  },
+  -- { -- Status bar controller
+  --   'nvim-lualine/lualine.nvim',
+  --   opts = {
+  --     options = {
+  --       -- Disable sections and component separators
+  --       component_separators = '',
+  --       section_separators = '',
+  --       theme = 'lackluster',
+  --     },
+  --   },
+  --   config = function(_, opts)
+  --     require('lualine').setup(opts)
+  --   end,
+  -- },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
@@ -1173,11 +1041,11 @@ require('lazy').setup({
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   require 'kickstart.plugins.wakatime',
   require 'kickstart.plugins.harpoon',
-
   require 'kickstart.plugins.rustaceanvim',
+  require 'kickstart.plugins.pretty_hover',
+  require 'kickstart.plugins.mark',
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    This is the easiest way to modularize your config.
+  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua` This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   { import = 'custom.plugins' },

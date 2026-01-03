@@ -157,3 +157,13 @@ export PATH="$PATH:/home/arcetors/.turso"
 
 # pywall 16
 (cat ~/.cache/wal/sequences &)
+
+export PATH=$PATH:/home/arcetors/.spicetify
+
+# pnpm
+export PNPM_HOME="/home/arcetors/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

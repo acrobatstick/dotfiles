@@ -76,10 +76,9 @@ main() {
         if [ -n "$original_path" ]; then
             swww img "$original_path" $SWWW_PARAMS
             sleep 1.5
-            ~/.local/bin/wal -n -e -q -i "$original_path"
-            cp ~/.cache/wal/colors-hyprland.conf ~/.config/hypr/colors.conf
-            cp ~/.cache/wal/colors-waybar.css ~/.config/waybar/colors.css
-            cp ~/.cache/wal/colors-waybar.css ~/.config/wofi/colors.css
+            ~/.local/bin/wal --backend haishoku --contrast "3.5" -n -e -i "$original_path" > ~/wal.log 2>&1
+            matugen image "$original_path" > ~/wal.log 2>&1
+
             ~/.config/waybar/scripts/launch.sh &
 
             echo "$original_path" > "$HOME/.cache/current_wallpaper"

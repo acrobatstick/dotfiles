@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # WALLPAPERS PATH
-DIR=$HOME/wallpapers
+DIR=$HOME/dotfiles/wallpapers
 
 CACHE_DIR="$HOME/.cache/wallpaper-switcher"
 THUMBNAIL_WIDTH="250"
@@ -70,16 +70,17 @@ main() {
             original_path=$(find "$DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | shuf -n 1)
         else
             original_filename=$(basename "${thumbnail_path%.*}")
-            original_path=$(find "$DIR" -maxdepth 1 -type l -name "${original_filename}.*" -exec realpath {} \; | head -n1)
+            original_path=$(find "$DIR" -maxdepth 1 -name "${original_filename}.*")
         fi
 
         if [ -n "$original_path" ]; then
             swww img "$original_path" $SWWW_PARAMS
             sleep 1.5
             ~/.local/bin/wal --backend haishoku --contrast "3.5" -n -e -i "$original_path" > ~/wal.log 2>&1
-            matugen image "$original_path" > ~/wal.log 2>&1
+            ~/.cargo/bin/matugen  image "$original_path" > ~/wal.log 2>&1
 
-            ~/.config/waybar/scripts/launch.sh &
+            ~/dotfiles/.config/waybar/scripts/refresh.sh &
+            ~/dotfiles/.config/swaync/refresh.sh &
 
             echo "$original_path" > "$HOME/.cache/current_wallpaper"
             sed -i "/^background {/,/^}/{s|^[[:space:]]*path =.*|    path = $original_path|}" "$HYPRLOCK_CONF"

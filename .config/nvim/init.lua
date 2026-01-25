@@ -11,6 +11,13 @@ vim.opt.termguicolors = true
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- Remove window separator borders
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = function()
+    vim.opt.fillchars:append { vert = ' ' }
+  end,
+})
+
 -- Remove tildes from empty lines
 vim.opt.fillchars = { eob = ' ' }
 
@@ -80,7 +87,7 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 
 -- Show which line your cursor is on
-vim.opt.cursorline = true
+vim.opt.cursorline = false
 vim.opt.guicursor = 'n-v-i-c:block-Cursor'
 
 -- Minimal number of screen lines to keep above and below the cursor.
@@ -897,7 +904,7 @@ require('lazy').setup({
         italic_comments = false, -- Italic comments
         contrast = 'low', -- Available values: "high", "low"
         theme = 'dark', -- Available values: "dark", "light"
-        accent = 'orange', -- Changes the definition (functions, structs etc.) colors. Available values: "red", "orange", "yellow", "green", "cyan", "blue", "magenta"
+        accent = 'blue', -- Changes the definition (functions, structs etc.) colors. Available values: "red", "orange", "yellow", "green", "cyan", "blue", "magenta"
       }
       vim.cmd.colorscheme 'gruvbox-minimal'
     end,

@@ -1,7 +1,7 @@
 mode=drun
 allow_images=true
 image_size=30
-prompt= search
+prompt= Search
 columns=1
 width=480
 height=330

@@ -1,0 +1,46 @@
+* {
+	border: none;
+	box-shadow: none;
+	outline: none;
+}
+window {
+	font-size: 14px;
+	font-family: "Iosevka";
+	background-color: {{colors.surface.default.hex}};
+	border: 1px solid {{colors.outline_variant.default.hex}};
+}
+#outer-box {
+	margin: 10px 10px 20px 10px;
+	background-color: {{colors.surface.default.hex}};
+}
+#inner-box {
+	margin: 10px;
+	background-color: {{colors.surface.default.hex}};
+}
+#text {
+	margin: 5px;
+}
+#entry {
+	padding: 5px 10px;
+}
+#entry > #text {
+	font-weight: normal;
+	color: {{colors.primary.default.hex}};
+}
+#entry:selected {
+	padding: 5px 10px;
+	background-color: {{colors.on_primary.default.hex}};
+}
+#input {
+	background: transparent;
+	margin: 0px 5px 0px 20px;
+	color: {{colors.tertiary.default.hex}};
+	padding: 5px;
+}
+#image {
+	margin-left: 20px;
+	margin-right: 20px;
+}
+#scroll {
+	margin: 0px;
+}

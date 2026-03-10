@@ -58,8 +58,8 @@ selected=$(generate_menu | wofi --show dmenu \
     --allow-images \
     --insensitive \
     --sort-order=default \
-    --style ~/.config/wofi/wallpaper.css \
-    --conf ~/.config/wofi/wallpaper.conf \
+    --style ~/dotfiles/.config/wofi/wallpaper.css \
+    --conf ~/dotfiles/.config/wofi/wallpaper.conf \
 )
 
 main() {
@@ -76,7 +76,7 @@ main() {
         if [ -n "$original_path" ]; then
             swww img "$original_path" $SWWW_PARAMS
             sleep 1.5
-            ~/.local/bin/wal --backend haishoku --contrast "3.5" -n -e -i "$original_path" > ~/wal.log 2>&1
+            # ~/.local/bin/wal --backend haishoku --contrast "3.5" -n -e -i "$original_path" > ~/wal.log 2>&1
             ~/.cargo/bin/matugen  image "$original_path" > ~/wal.log 2>&1
 
             ~/dotfiles/.config/waybar/scripts/refresh.sh &

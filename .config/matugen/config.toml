@@ -6,10 +6,18 @@ input_path = '~/.config/matugen/templates/hyprland-colors.conf'
 output_path = '~/.config/hypr/colors.conf'
 post_hook = 'hyprctl reload'
 
-[templates.kitty]
-input_path = '~/.config/matugen/templates/kitty-colors.conf'
-output_path = '~/.config/kitty/colors.conf'
-post_hook = 'pkill -SIGUSR1 kitty'
+# [templates.kitty]
+# input_path = '~/.config/matugen/templates/kitty-colors.conf'
+# output_path = '~/.config/kitty/colors.conf'
+# post_hook = 'pkill -SIGUSR1 kitty'
+
+[templates.wofi-drun]
+input_path = "./templates/wofi-drun-colors.css"
+output_path = "~/dotfiles/.config/wofi/style.css"
+
+[templates.wofi-dmenu]
+input_path = "./templates/wofi-dmenu-colors.css"
+output_path = "~/dotfiles/.config/wofi/wallpaper.css"
 
 [templates.waybar]
 input_path = '~/.config/matugen/templates/colors.css'

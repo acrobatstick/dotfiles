@@ -1,44 +1,35 @@
-@import ".cache/wal/colors-waybar.css";
-
 window {
-	background-color: @background;
-	border: 1px solid @color1;
+	font-family: "Iosevka";
+	background-color: #1a120e;
+	border: 1px solid #52443d;
 }
-
 #input {
 	margin: 2px;
 	padding: 4px;
 	border: none;
-	background-color: @color0;
-	color: @color7;
+	background-color: #1a120e;
+	color: #ffb691;
 }
-
 #inner-box {
 	margin: 0px;
 }
-
 #outer-box {
 	margin: 0px;
 }
-
 #scroll {
 	margin: 0px;
 }
-
 #text {
 	margin: 2px;
-	color: @color7;
+	color: #ffb691;
 }
-
 #entry {
 	padding: 2px;
 	margin: 0px;
 }
-
 #entry:selected {
-	background-color: @color1;
+	background-color: #52443d;
 }
-
 #img {
 	margin: 2px;
 	padding-left: 4px;

@@ -57,6 +57,11 @@ vim.opt_local.smarttab = true
 vim.opt_local.expandtab = true
 vim.opt_local.autoindent = true
 
+-- Tab sizes
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
 -- Save undo history
 vim.opt.undofile = true
 
@@ -579,9 +584,9 @@ require('lazy').setup({
       local volar_path = mason_packages .. '/vue-language-server/node_modules/@vue/language-server'
 
       local servers = {
-        -- clangd = {},
+        clangd = {},
+        pyright = {},
         -- gopls = {},
-        -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -682,6 +687,7 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'ts_ls',
+        'clangd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -715,12 +721,12 @@ require('lazy').setup({
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, vue = true }
+        local disable_filetypes = { c = false, cpp = false, vue = false }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
           lsp_format_opt = 'never'
@@ -735,7 +741,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        -- python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { 'prettierd', 'prettier', stop_after_first = true },
@@ -749,6 +755,9 @@ require('lazy').setup({
     dependencies = {
       {
         'hrsh7th/cmp-nvim-lsp-signature-help',
+      },
+      {
+        'onsails/lspkind.nvim',
       },
       -- Snippet Engine & its associated nvim-cmp source
       {
@@ -785,18 +794,16 @@ require('lazy').setup({
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
+
       local luasnip = require 'luasnip'
+      local lspkind = require 'lspkind'
+
+      local str = require 'cmp.utils.str'
+      local types = require 'cmp.types'
+
       luasnip.config.setup {}
 
       cmp.setup {
-        -- window = {
-        --   completion = {
-        --     border = 'single',
-        --   },
-        --   documentation = {
-        --     border = 'single',
-        --   },
-        -- },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -870,63 +877,85 @@ require('lazy').setup({
           { name = 'path' },
           { name = 'nvim_lsp_signature_help' },
         },
+        window = {
+          completion = cmp.config.window.bordered {
+            border = 'single',
+          },
+          documentation = cmp.config.window.bordered {
+            border = 'single',
+          },
+        },
+        formatting = {
+          fields = {
+            cmp.ItemField.Abbr,
+            cmp.ItemField.Kind,
+            cmp.ItemField.Menu,
+          },
+          format = lspkind.cmp_format {
+            mode = 'symbol_text',
+            maxwidth = 60,
+            before = function(entry, vim_item)
+              vim_item.menu = ({
+                nvim_lsp = 'ﲳ',
+                nvim_lua = '',
+                treesitter = '',
+                path = 'ﱮ',
+                buffer = '﬘',
+                zsh = '',
+                vsnip = '',
+                spell = '暈',
+              })[entry.source.name]
+
+              -- Get the full snippet (and only keep first line)
+              local word = entry:get_insert_text()
+              word = str.oneline(word)
+              vim_item.abbr = word
+              word = str.oneline(word)
+              if entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet and string.sub(vim_item.abbr, -1, -1) == '~' then
+                word = word .. '~'
+              end
+              vim_item.abbr = word
+
+              return vim_item
+            end,
+          },
+        },
       }
     end,
   },
 
   -- {
-  --   'nickkadutskyi/jb.nvim',
-  --   lazy = false,
-  --   priority = 1000,
-  --   opts = {},
-  --   config = function()
-  --     require('jb').setup {
-  --       disable_hl_args = {
-  --         bold = false,
-  --         italic = false,
-  --       },
-  --       snacks = {
-  --         explorer = {
-  --           enabled = true,
-  --         },
-  --       },
-  --       transparent = true,
-  --     }
-  --     vim.cmd 'colorscheme jb'
-  --   end,
-  -- },
-
-  {
-    'dybdeskarphet/gruvbox-minimal.nvim',
-    init = function()
-      require('gruvbox-minimal').setup {
-        transparent = true, -- Sets all the major background values to 'none'
-        italic_comments = false, -- Italic comments
-        contrast = 'low', -- Available values: "high", "low"
-        theme = 'dark', -- Available values: "dark", "light"
-        accent = 'blue', -- Changes the definition (functions, structs etc.) colors. Available values: "red", "orange", "yellow", "green", "cyan", "blue", "magenta"
-      }
-      vim.cmd.colorscheme 'gruvbox-minimal'
-    end,
-  },
-  -- {
-  --   'slugbyte/lackluster.nvim',
-  --   lazy = false,
-  --   priority = 1000,
+  --   'dybdeskarphet/gruvbox-minimal.nvim',
   --   init = function()
-  --     local lackluster = require 'lackluster'
-  --     lackluster.setup {
-  --       tweak_background = {
-  --         normal = 'none', -- transparent
-  --         telescope = 'default', -- telescope
-  --       },
+  --     require('gruvbox-minimal').setup {
+  --       transparent = true, -- Sets all the major background values to 'none'
+  --       italic_comments = false, -- Italic comments
+  --       contrast = 'low', -- Available values: "high", "low"
+  --       theme = 'dark', -- Available values: "dark", "light"
+  --       accent = 'magenta', -- Changes the definition (functions, structs etc.) colors. Available values: "red", "orange", "yellow", "green", "cyan", "blue", "magenta"
   --     }
-  --     -- vim.cmd.colorscheme 'lackluster'
-  --     vim.cmd.colorscheme 'lackluster-mint' -- my favorite
+  --     vim.cmd.colorscheme 'gruvbox-minimal'
   --   end,
   -- },
-
   -- Highlight todo, notes, etc in comments
+  {
+    'oskarnurm/koda.nvim',
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require('koda').setup {
+        transparent = false,
+        styles = {
+          functions = { bold = false },
+          keywords = { bold = false },
+          strings = {},
+          constants = { bold = false },
+        },
+      }
+      vim.cmd 'colorscheme koda'
+    end,
+  },
+
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
 
@@ -989,6 +1018,7 @@ require('lazy').setup({
       ensure_installed = {
         'bash',
         'c',
+        'cpp',
         'diff',
         'html',
         'lua',
@@ -1010,6 +1040,7 @@ require('lazy').setup({
         'gotmpl',
         'sql',
         'rust',
+        'python',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,

@@ -9,7 +9,7 @@ fi
 
 # Oh My Zsh
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="cypher"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 ZLE_RPROMPT_INDENT=0
 
 plugins=(
@@ -40,7 +40,7 @@ case ":$PATH:" in
 esac
 
 # wal
-(cat ~/.cache/wal/sequences &)
+# (cat ~/.cache/wal/sequences &)
 
 # Functions
 goto() {

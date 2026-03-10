@@ -1,0 +1,36 @@
+window {
+	font-family: "Iosevka";
+	background-color: {{colors.surface.default.hex}};
+	border: 1px solid {{colors.outline_variant.default.hex}};
+}
+#input {
+	margin: 2px;
+	padding: 4px;
+	border: none;
+	background-color: {{colors.surface.default.hex}};
+	color: {{colors.primary.default.hex}};
+}
+#inner-box {
+	margin: 0px;
+}
+#outer-box {
+	margin: 0px;
+}
+#scroll {
+	margin: 0px;
+}
+#text {
+	margin: 2px;
+	color: {{colors.primary.default.hex}};
+}
+#entry {
+	padding: 2px;
+	margin: 0px;
+}
+#entry:selected {
+	background-color: {{colors.surface_variant.default.hex}};
+}
+#img {
+	margin: 2px;
+	padding-left: 4px;
+}

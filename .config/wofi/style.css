@@ -6,16 +6,16 @@
 window {
 	font-size: 14px;
 	font-family: "Iosevka";
-	background-color: #1a120e;
-	border: 1px solid #52443d;
+	background-color: #0f1416;
+	border: 1px solid #3f484b;
 }
 #outer-box {
 	margin: 10px 10px 20px 10px;
-	background-color: #1a120e;
+	background-color: #0f1416;
 }
 #inner-box {
 	margin: 10px;
-	background-color: #1a120e;
+	background-color: #0f1416;
 }
 #text {
 	margin: 5px;
@@ -25,16 +25,16 @@ window {
 }
 #entry > #text {
 	font-weight: normal;
-	color: #ffb691;
+	color: #84d2e6;
 }
 #entry:selected {
 	padding: 5px 10px;
-	background-color: #542202;
+	background-color: #003640;
 }
 #input {
 	background: transparent;
 	margin: 0px 5px 0px 20px;
-	color: #cfc890;
+	color: #bec5eb;
 	padding: 5px;
 }
 #image {

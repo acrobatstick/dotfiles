@@ -1,14 +1,14 @@
 window {
 	font-family: "Iosevka";
-	background-color: #1a120e;
-	border: 1px solid #52443d;
+	background-color: #0f1416;
+	border: 1px solid #3f484b;
 }
 #input {
 	margin: 2px;
 	padding: 4px;
 	border: none;
-	background-color: #1a120e;
-	color: #ffb691;
+	background-color: #0f1416;
+	color: #84d2e6;
 }
 #inner-box {
 	margin: 0px;
@@ -21,14 +21,14 @@ window {
 }
 #text {
 	margin: 2px;
-	color: #ffb691;
+	color: #84d2e6;
 }
 #entry {
 	padding: 2px;
 	margin: 0px;
 }
 #entry:selected {
-	background-color: #52443d;
+	background-color: #3f484b;
 }
 #img {
 	margin: 2px;

@@ -1,6 +1,6 @@
 export DRI_PRIME=1
-export XDG_SESSION_TYPE=wayland
-export WAYLAND_DISPLAY=wayland-1
+# export XDG_SESSION_TYPE=wayland
+# export WAYLAND_DISPLAY=wayland-1
 
 # Enable Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -63,8 +63,17 @@ export GOPATH="$HOME/go"
 export BUN_INSTALL="$HOME/.bun"
 
 export PATH="$HOME/.local/bin:$GOPATH/bin:$BUN_INSTALL/bin:$PATH"
-export PATH="$HOME/.asdf/bin:$HOME/.asdf/shims:$PATH"
 export PATH="$HOME/.turso:$HOME/.spicetify:$PATH"
 export PATH="$HOME/Programs/nsq/build:$PATH"
+export PATH="$HOME/odin:$PATH"
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+ln -sf /run/user/$(id -u)/app/com.discordapp.Discord/discord-ipc-0 /run/user/$(id -u)/discord-ipc-0
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - bash)"
 
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
